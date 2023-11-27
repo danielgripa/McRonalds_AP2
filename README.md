@@ -87,3 +87,7 @@ Especificação:
  * **Sistema** : Git & GitHub.
 
 <div id='ref'/>
+
+Foram disponibilizados dois arquivos executáveis: um para Windows e um para Linux.
+
+Para execução do programa, basta abrir o executável e seguir as instruções apresentadas no próprio programa!
