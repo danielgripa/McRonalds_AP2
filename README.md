@@ -72,7 +72,7 @@ Bugs encontrados
       5. Insira quaisquer valores para nome, descrição e preço;
       6. Selecione a opção 5 (exibir os produtos).
          
-      Resulyado: O programa lista todos os produtos, porém o id do produto criado manualmente é 1, e não 4. Ou seja, o programa não está considerando os ids dos produtos pré-carregados.
+      Resultado: O programa lista todos os produtos, porém o id do produto criado manualmente é 1, e não 4. Ou seja, o programa não está considerando os ids dos produtos pré-carregados.
 
 <div id='tecnologia'/>
 
