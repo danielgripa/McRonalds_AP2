@@ -48,22 +48,22 @@ Atualmente, a empresa já possui um sistema que processa os pedidos, mas esse si
 ## Requisitos
 
 Requisitos funcionais:
-    O programa deve incluir a opção de atualizar um produto, modificando o seu preço. O id, o nome e a descrição devem ser mantidos;
-    O programa deve incluir uma nova métrica, chamada ticket médio, que calcula o valor médio de cada pedido (total faturado até o momento, dividido pelo número de pedidos já encerrados);
-  O programa deve incluir uma segunda forma de exibir os produtos, ordenados por nome, e não por id;
+    - O programa deve incluir a opção de atualizar um produto, modificando o seu preço. O id, o nome e a descrição devem ser mantidos;
+    - O programa deve incluir uma nova métrica, chamada ticket médio, que calcula o valor médio de cada pedido (total faturado até o momento, dividido pelo número de pedidos já encerrados);
+    - O programa deve incluir uma segunda forma de exibir os produtos, ordenados por nome, e não por id.
 
 Requisitos não funcionais:
-  A estrutura de dados que forma a lista de produtos deve ser uma transformada em uma lista simplesmente encadeada. Todas as operações sobre essa lista (adicionar, buscar, excluir, atualizar, exibir etc.) devem ser refatorados para considerar uma lista encadeada;
-  Não há restrição do algoritmo de ordenação utilizado para a exibição dos produtos ordenados pelo nome (pode ser o bubblesort, por exemplo).
+   - A estrutura de dados que forma a lista de produtos deve ser uma transformada em uma lista simplesmente encadeada. Todas as operações sobre essa lista (adicionar, buscar, excluir, atualizar, exibir etc.) devem ser refatorados para considerar uma lista encadeada;
+   - Não há restrição do algoritmo de ordenação utilizado para a exibição dos produtos ordenados pelo nome (pode ser o bubblesort, por exemplo).
   
 Bugs encontrados
-  *Bug 1*
+   - *Bug 1*
       1.Selecione a opção 6 (adicionar pedido);
       2.Insira valores quaisquer para um pedido (p.ex., s, depois 1 1 e depois 0 0);
       3.Selecione a opção 7 (expedir pedido);
       4.Selecione a opção 7 (expedir pedido).
       O programa cai num panic e não consegue resolver essa operação. O comportamento desse cenário deve ser idêntico ao caso em que se insere a opção 7 (expedir pedido) assim que o programa é aberto.
-  *Bug 2*
+  - *Bug 2*
       1.Abra o programa, utilizando o arquivo de dados (dados.csv) fornecido;
       2.Selecione a opção 5 (exibir os produtos);
       3.Você verá três produtos criados;
