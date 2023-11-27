@@ -62,7 +62,8 @@ Bugs encontrados
       2. Insira valores quaisquer para um pedido (p.ex., s, depois 1 1 e depois 0 0);
       3. Selecione a opção 7 (expedir pedido);
       4. Selecione a opção 7 (expedir pedido).
-      O programa cai num panic e não consegue resolver essa operação. O comportamento desse cenário deve ser idêntico ao caso em que se insere a opção 7 (expedir pedido) assim que o programa é aberto.
+         
+      Resultado: O programa cai num panic e não consegue resolver essa operação. O comportamento desse cenário deve ser idêntico ao caso em que se insere a opção 7 (expedir pedido) assim que o programa é aberto.
   - *Bug 2:*
       1. Abra o programa, utilizando o arquivo de dados (dados.csv) fornecido;
       2. Selecione a opção 5 (exibir os produtos);
@@ -70,7 +71,8 @@ Bugs encontrados
       4. Selecione a opção 1 (cadastrar novo produto);
       5. Insira quaisquer valores para nome, descrição e preço;
       6. Selecione a opção 5 (exibir os produtos).
-O programa lista todos os produtos, porém o id do produto criado manualmente é 1, e não 4. Ou seja, o programa não está considerando os ids dos produtos pré-carregados.
+         
+      Resulyado: O programa lista todos os produtos, porém o id do produto criado manualmente é 1, e não 4. Ou seja, o programa não está considerando os ids dos produtos pré-carregados.
 
 <div id='tecnologia'/>
 
