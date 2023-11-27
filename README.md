@@ -56,7 +56,7 @@ Requisitos não funcionais:
    - A estrutura de dados que forma a lista de produtos deve ser uma transformada em uma lista simplesmente encadeada. Todas as operações sobre essa lista (adicionar, buscar, excluir, atualizar, exibir etc.) devem ser refatorados para considerar uma lista encadeada;
    - Não há restrição do algoritmo de ordenação utilizado para a exibição dos produtos ordenados pelo nome (pode ser o bubblesort, por exemplo).
   
-Bugs encontrados
+Bugs encontrados:
    - *Bug 1:*
       1. Selecione a opção 6 (adicionar pedido);
       2. Insira valores quaisquer para um pedido (p.ex., s, depois 1 1 e depois 0 0);
