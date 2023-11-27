@@ -6,92 +6,104 @@ import (
 	"strings"
 )
 
-const maxProdutos = 50
+type ProdutoNode struct {
+	Produto
+	Next *ProdutoNode
+}
 
-var Produtos [maxProdutos]Produto
+var primeiroProduto *ProdutoNode
 var totalProdutos = 0
 
-func tentarCriar(nome, descricao string, preco float64, id int) Produto {
+func tentarCriar(nome, descricao string, preco float64, id int) *ProdutoNode {
 	if id != -1 {
 		_, idProcurado := BuscarId(id)
-		if idProcurado != -1 {
-			return Produto{} // Retorna um produto vazio se o ID já existir
+		if idProcurado != nil {
+			return nil // Retorna nil se o ID já existir
 		}
 	}
 
-	// Procurar o maior ID existente e atribuir o próximo ID disponível
 	maxExistingID := 0
-	for _, produto := range Produtos {
-		if produto.Id > maxExistingID {
-			maxExistingID = produto.Id
+	current := primeiroProduto
+	for current != nil {
+		if current.Id > maxExistingID {
+			maxExistingID = current.Id
 		}
+		current = current.Next
 	}
 	nextAvailableID := maxExistingID + 1
 
-	return criar(nome, descricao, preco, nextAvailableID)
+	return &ProdutoNode{Produto: criar(nome, descricao, preco, nextAvailableID)}
 }
 
 func AdicionarUnico(nome, descricao string, preco float64, id int) int {
-	if totalProdutos == maxProdutos {
-		return -1
-	} // Overflow
-
-	for _, produto := range Produtos {
-		if (produto == Produto{}) {
-			break
-		}
-		if produto.Nome == nome {
+	if totalProdutos == 0 {
+		produtoCriado := tentarCriar(nome, descricao, preco, id)
+		if produtoCriado == nil {
 			return -2
 		}
+		primeiroProduto = produtoCriado
+		totalProdutos++
+		m.M.SomaProdutosCadastrados(1)
+		return totalProdutos
+	}
+
+	// Verificar se o produto já existe
+	current := primeiroProduto
+	for current != nil {
+		if current.Nome == nome {
+			return -2
+		}
+		current = current.Next
 	}
 
 	produtoCriado := tentarCriar(nome, descricao, preco, id)
-	if (produtoCriado == Produto{}) {
+	if produtoCriado == nil {
 		return -3
 	}
 
-	Produtos[totalProdutos] = produtoCriado
+	// Adicionar no início da lista
+	produtoCriado.Next = primeiroProduto
+	primeiroProduto = produtoCriado
 	totalProdutos++
 	m.M.SomaProdutosCadastrados(1)
 	return totalProdutos
 }
 
-func BuscarId(id int) (Produto, int) {
-	for ind, produto := range Produtos {
-		if (produto == Produto{}) {
-			break
+func BuscarId(id int) (*ProdutoNode, *ProdutoNode) {
+	var anterior *ProdutoNode
+	current := primeiroProduto
+	for current != nil {
+		if current.Id == id {
+			return current, anterior
 		}
-		if produto.Id == id {
-			return produto, ind
-		}
+		anterior = current
+		current = current.Next
 	}
-
-	return Produto{}, -1
+	return nil, nil
 }
 
 func BuscarNome(comecaCom string) ([]Produto, int) {
 	var produtosEncontrados []Produto
 
-	for _, produto := range Produtos {
-		if (produto == Produto{}) {
-			break
+	current := primeiroProduto
+	for current != nil {
+		if strings.HasPrefix(current.Nome, comecaCom) {
+			produtosEncontrados = append(produtosEncontrados, current.Produto)
 		}
-
-		if strings.HasPrefix(produto.Nome, comecaCom) {
-			produtosEncontrados = append(produtosEncontrados, produto)
-		}
+		current = current.Next
 	}
 	return produtosEncontrados, len(produtosEncontrados)
 }
 
 func Exibir() {
-	for _, produto := range Produtos {
-		if (produto != Produto{}) {
-			fmt.Println("\nProduto", produto.Id)
-			fmt.Println("Nome:", produto.Nome)
-			fmt.Println("Descrição:", produto.Descricao)
-			fmt.Printf("Preço: R$ %.2f\n", produto.Preco)
-		}
+	current := primeiroProduto
+	for current != nil {
+		fmt.Println("\nProduto", current.Id)
+		fmt.Println("Nome:", current.Nome)
+		fmt.Println("Descrição:", current.Descricao)
+		fmt.Printf("Preço: R$ %.2f\n", current.Preco)
+
+		current = current.Next
 	}
 }
 
@@ -100,48 +112,85 @@ func Excluir(id int) int {
 		return -2
 	}
 
-	_, ind := BuscarId(id)
-	if ind == -1 {
+	produto, anterior := BuscarId(id)
+	if produto == nil {
 		return -1
 	}
 
-	for i := ind; i < totalProdutos-1; i++ {
-		Produtos[i] = Produtos[i+1]
+	if anterior == nil {
+		// Se o produto for o primeiro na lista
+		primeiroProduto = produto.Next
+	} else {
+		anterior.Next = produto.Next
 	}
+
 	totalProdutos--
-	Produtos[totalProdutos] = Produto{}
 	m.M.SomaProdutosCadastrados(-1)
 	return 0
 }
 
-// ExibirOrdenadoPorNome exibe os produtos ordenados por nome.
+/*
+Cria uma cópia da lista de produtos e organiza em ordem alfabética
+*/
 func ExibirOrdenadoPorNome() {
-	// Implementação simplificada do Bubble Sort
+
+	copia := CopiarLista(primeiroProduto) // Cria uma cópia da lista encadeada
+
+	// Bubble Sort para classificação dos produtos em ordem alfabética
 	for i := 0; i < totalProdutos; i++ {
+		atual := copia
 		for j := 0; j < totalProdutos-i-1; j++ {
-			if Produtos[j].Nome > Produtos[j+1].Nome {
-				Produtos[j], Produtos[j+1] = Produtos[j+1], Produtos[j]
+			if atual.Produto.Nome > atual.Next.Produto.Nome {
+				atual.Produto, atual.Next.Produto = atual.Next.Produto, atual.Produto
 			}
+
+			atual = atual.Next
 		}
 	}
 
-	// Exibindo produtos ordenados
-	for _, produto := range Produtos {
-		if (produto == Produto{}) {
-			break
-		}
-		produto.Exibir()
+	for copia != nil {
+		copia.Produto.Exibir()
+		copia = copia.Next
 	}
 }
 
-// AtualizarPreco atualiza o preço de um produto existente.
+/*
+Chama a função BuscarID para encontrar o produto que precisa ter o preço modificado e faz a alteração.
+*/
 func AtualizarPreco(id int, novoPreco float64) int {
-	produto, ind := BuscarId(id)
-	if ind == -1 {
+	produto, _ := BuscarId(id)
+	if produto == nil {
 		return -1 // Produto não encontrado
 	}
 
 	produto.Preco = novoPreco
-	Produtos[ind] = produto
 	return 0 // Produto encontrado
+}
+
+/*
+Cria uma cópia da lista encadeada para que a função ExibirOrdenadoPorNome não desorganize a função Exibir que está por ordem de cadastro de ID.
+*/
+func CopiarLista(original *ProdutoNode) *ProdutoNode {
+
+	if original == nil {
+		return nil
+	}
+
+	copia := &ProdutoNode{
+		Produto: original.Produto,
+		Next:    nil,
+	}
+
+	ultimoCopia := copia
+
+	for atual := original.Next; atual != nil; atual = atual.Next {
+		novoNo := &ProdutoNode{
+			Produto: atual.Produto,
+			Next:    nil,
+		}
+		ultimoCopia.Next = novoNo
+		ultimoCopia = novoNo
+	}
+
+	return copia
 }

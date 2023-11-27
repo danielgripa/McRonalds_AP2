@@ -5,23 +5,27 @@ import (
 )
 
 type Item struct {
-	Prod  *p.Produto
+	Prod  *p.ProdutoNode // Alterado para *p.ProdutoNode
 	Quant int
 }
 
-func (p *Item) CalcularPrecoParcial() float64 {
-	return p.Prod.Preco * float64(p.Quant)
+// CalcularPrecoParcial calcula o preço parcial do item.
+func (i *Item) CalcularPrecoParcial() float64 {
+	if i == nil || i.Prod == nil {
+		return 0.0
+	}
+	return i.Prod.Produto.Preco * float64(i.Quant) // Alterado para i.Prod.Produto.Preco
 }
 
 /*
-Retorna um Item com as informações solicitadas.
+Criar retorna um Item com as informações solicitadas.
 Se o id não existir para um produto, retorna um Item vazio.
 */
 func Criar(id int, quant int) Item {
-	produto, _ := p.BuscarId(id)
-	if (produto == p.Produto{}) {
+	produtoNode, _ := p.BuscarId(id) // Alterado para produtoNode
+	if produtoNode == nil {
 		return Item{}
 	}
 
-	return Item{Prod: &produto, Quant: quant}
+	return Item{Prod: produtoNode, Quant: quant}
 }

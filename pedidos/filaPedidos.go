@@ -71,6 +71,7 @@ func Expedir() int {
 
 	pedidoExpedido := excluir() // Função excluir remove o primeiro pedido da fila
 	if (pedidoExpedido == Pedido{}) {
+		fmt.Println("Não há pedidos em andamento para realizar a operação.")
 		return -1 // Caso não haja pedidos para expedir
 	}
 
