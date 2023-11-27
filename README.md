@@ -48,10 +48,9 @@ Atualmente, a empresa já possui um sistema que processa os pedidos, mas esse si
 ## Requisitos
 
 Requisitos funcionais:
-
-    - O programa deve incluir a opção de atualizar um produto, modificando o seu preço. O id, o nome e a descrição devem ser mantidos;
-    - O programa deve incluir uma nova métrica, chamada ticket médio, que calcula o valor médio de cada pedido (total faturado até o momento, dividido pelo número de pedidos já encerrados);
-    - O programa deve incluir uma segunda forma de exibir os produtos, ordenados por nome, e não por id.
+   - O programa deve incluir a opção de atualizar um produto, modificando o seu preço. O id, o nome e a descrição devem ser mantidos;
+   - O programa deve incluir uma nova métrica, chamada ticket médio, que calcula o valor médio de cada pedido (total faturado até o momento, dividido pelo número de pedidos já encerrados);
+   - O programa deve incluir uma segunda forma de exibir os produtos, ordenados por nome, e não por id.
 
 Requisitos não funcionais:
    - A estrutura de dados que forma a lista de produtos deve ser uma transformada em uma lista simplesmente encadeada. Todas as operações sobre essa lista (adicionar, buscar, excluir, atualizar, exibir etc.) devem ser refatorados para considerar uma lista encadeada;
